@@ -1,5 +1,9 @@
 <?php
 
+ini_set("session.cookie_lifetime", "7200");
+
+ini_set("session.gc_maxlifetime", "7200");
+
 session_start();
 
 ?>
@@ -52,6 +56,8 @@ PLUGINS DE CSS
 
   <!-- SweetAlert 2 -->
   <script src="vistas/plugins/sweetalert2/sweetalert2.all.js"></script>
+  <!-- Habilitar soporte internet explorer 11 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/core-js/2.4.1/core.js"></script>
 
 <!--==============================================
 PLUGINS DE JAVASCRIPT
