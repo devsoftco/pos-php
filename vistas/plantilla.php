@@ -54,10 +54,17 @@ PLUGINS DE CSS
   <link rel="stylesheet" href="vistas/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
   <link rel="stylesheet" href="vistas/bower_components/datatables.net-bs/css/responsive.bootstrap.min.css">
 
-  <!-- SweetAlert 2 -->
-  <script src="vistas/plugins/sweetalert2/sweetalert2.all.js"></script>
-  <!-- Habilitar soporte internet explorer 11 -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/core-js/2.4.1/core.js"></script>
+  <!-- iCheck for checkboxes and radio inputs -->
+  <link rel="stylesheet" href="vistas/plugins/iCheck/all.css">
+
+   <!-- Daterange picker -->
+  <link rel="stylesheet" href="vistas/bower_components/bootstrap-daterangepicker/daterangepicker.css">
+
+  <!-- Morris chart -->
+  <link rel="stylesheet" href="vistas/bower_components/morris.js/morris.css">
+
+  
+
 
 <!--==============================================
 PLUGINS DE JAVASCRIPT
@@ -84,6 +91,33 @@ PLUGINS DE JAVASCRIPT
 <script src="vistas/bower_components/datatables.net-bs/js/dataTables.responsive.min.js"></script>
 <script src="vistas/bower_components/datatables.net-bs/js/responsive.bootstrap.min.js"></script>
 
+<!-- SweetAlert 2 -->
+<script src="vistas/plugins/sweetalert2/sweetalert2.all.js"></script>
+<!-- Habilitar soporte internet explorer 11 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/core-js/2.4.1/core.js"></script>
+
+<!-- iCheck 1.0.1 -->
+<script src="vistas/plugins/iCheck/icheck.min.js"></script>
+
+<!-- InputMask -->
+<script src="vistas/plugins/input-mask/jquery.inputmask.js"></script>
+<script src="vistas/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
+<script src="vistas/plugins/input-mask/jquery.inputmask.extensions.js"></script>
+
+<!-- jQuery Number -->
+<script src="vistas/plugins/jqueryNumber/jquerynumber.min.js"></script>
+
+<!-- daterangepicker http://www.daterangepicker.com/-->
+<script src="vistas/bower_components/moment/min/moment.min.js"></script>
+<script src="vistas/bower_components/bootstrap-daterangepicker/daterangepicker.js"></script>
+
+<!-- Morris.js charts http://morrisjs.github.io/morris.js/-->
+<script src="vistas/bower_components/raphael/raphael.min.js"></script>
+<script src="vistas/bower_components/morris.js/morris.min.js"></script>
+
+<!-- ChartJS http://www.chartjs.org/-->
+<script src="vistas/bower_components/Chart.js/Chart.js"></script>
+
 </head>
 
 <!--==============================================
@@ -101,7 +135,7 @@ CUERPO DOCUMENTO
 
   
 
-  echo '"<div class="wrapper">';
+  echo '<div class="wrapper">';
 
     /*====================================
     Cabezote
@@ -121,9 +155,27 @@ CUERPO DOCUMENTO
 
       if($_GET["ruta"] == "inicio" ||
          $_GET["ruta"] == "usuarios"||
+         $_GET["ruta"] == "beneficiarios"||
          $_GET["ruta"] == "categorias" ||
+         $_GET["ruta"] == "empresas-ap" ||
+         $_GET["ruta"] == "empresas-af" ||
+         $_GET["ruta"] == "eps" ||
+         $_GET["ruta"] == "arl" ||
+         $_GET["ruta"] == "caja-compensaciones" ||
+         $_GET["ruta"] == "arl-tarifas" ||
+         $_GET["ruta"] == "tarifa-afiliacion" ||
+         $_GET["ruta"] == "tarifa-administracion" ||
+         $_GET["ruta"] == "tipo-afiliado" ||
+         $_GET["ruta"] == "aportes" ||
+         $_GET["ruta"] == "aportes-pagar" ||
+         $_GET["ruta"] == "aportes-afiliacion" ||
+         $_GET["ruta"] == "afp" ||
+         $_GET["ruta"] == "ibc" ||
+         $_GET["ruta"] == "profesiones" ||
          $_GET["ruta"] == "productos" ||
-         $_GET["ruta"] == "clientes" ||
+         $_GET["ruta"] == "afiliados" ||
+         $_GET["ruta"] == "afiliaciones" ||
+         $_GET["ruta"] == "crear-afiliacion" ||
          $_GET["ruta"] == "ventas" ||
          $_GET["ruta"] == "crear-venta" || 
          $_GET["ruta"] == "reportes" ||
@@ -164,6 +216,28 @@ CUERPO DOCUMENTO
 
 <script src="vistas/js/plantilla.js"></script>
 <script src="vistas/js/usuarios.js"></script>
+<script src="vistas/js/afiliados.js"></script>
+<script src="vistas/js/categorias.js"></script>
+<script src="vistas/js/eps.js"></script>
+<script src="vistas/js/arl.js"></script>
+<script src="vistas/js/arl-tarifas.js"></script>
+<script src="vistas/js/tarifa-afiliacion.js"></script>
+<script src="vistas/js/tarifa-administracion.js"></script>
+<script src="vistas/js/tipo-afiliado.js"></script>
+<script src="vistas/js/afp.js"></script>
+<script src="vistas/js/ibc.js"></script>
+<script src="vistas/js/empresas-ap.js"></script>
+<script src="vistas/js/empresas-af.js"></script>
+<script src="vistas/js/beneficiarios.js"></script>
+<script src="vistas/js/profesiones.js"></script>
+<script src="vistas/js/crear-afiliacion.js"></script>
+<script src="vistas/js/afiliaciones.js"></script>
+<script src="vistas/js/caja-compensaciones.js"></script>
+<script src="vistas/js/aportes.js"></script>
+<script src="vistas/js/reportes.js"></script>
+
+
+
 
 </body>
 </html>

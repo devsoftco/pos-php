@@ -93,6 +93,8 @@ $(document).on("click", ".btnActivar", function() {
     var idUsuario = $(this).attr("idUsuario");
     var estadoUsuario = $(this).attr("estadoUsuario");
 
+    //console.log("idUsuario", idUsuario);
+
     var datos = new FormData();
     datos.append("activarId", idUsuario);
     datos.append("activarUsuario", estadoUsuario);
