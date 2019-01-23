@@ -36,9 +36,12 @@
           <th style="width:10px">#</th>
           <th>Afiliado</th>
           <th>Documento</th>
-          <th>Total Pagado</th>
+          <th>EPS</th>
+          <th>ARL</th>
+          <th>Tipo ARL</th>
+          <th>CCF</th>
+          <th>AFP</th>
           <th>Estado</th>
-          <th>Acciones</th>
 
         </tr>
 
@@ -60,7 +63,12 @@
             <td>'.($key+1).'</td>
             <td>'.$value["afiliado"].'</td>
             <td>'.$value["documento"].'</td>
-            <td>$'.$english_format_number = number_format($value["total_pagado"],0,".",".").'</td>';
+            <td>'.$value["eps"].'</td>
+            <td>'.$value["arl"].'</td>
+            <td>'.$value["tipo_arl"].'</td>
+            <td>'.$value["ccf"].'</td>
+            <td>'.$value["afp"].'</td>
+            ';
             
             
 
@@ -73,29 +81,7 @@
               echo '<td><button class="btn btn-danger btn-xs btnPagoAporte" idAfiliadoA="'.$value["afiliacion_id"].'" data-toggle="modal" data-target="#modalAgregarPagoAporte">Pagar</button></td>';
 
             }
-          
-            echo '
-            <td>
 
-              <div class="btn-group">';
-
-                if($value["aporte_id"] != ""){
-
-                  echo '<button class="btn btn-info btnImprimirFacturaApo" idPagoApo="'.$value["aporte_id"].'" ><i class="fa fa-print"></i></button>';
-  
-                }else{
-  
-                  echo '<button class="btn btn-info btnImprimirFacturaApo" idPagoApo="'.$value["aporte_id"].'" disabled><i class="fa fa-print"></i></button>';
-  
-                }
-  
-                  echo '<button class="btn btn-success btnEliminarUsuario" idUsuario="'.$value["aporte_id"].'"><i class="fa fa-search"></i></button>
-
-              </div>
-
-            </td>
-            
-          </tr>';
           }
 
           ?>

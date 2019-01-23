@@ -168,6 +168,7 @@ CUERPO DOCUMENTO
          $_GET["ruta"] == "tipo-afiliado" ||
          $_GET["ruta"] == "aportes" ||
          $_GET["ruta"] == "aportes-pagar" ||
+         $_GET["ruta"] == "aportes-pagados" ||
          $_GET["ruta"] == "aportes-afiliacion" ||
          $_GET["ruta"] == "afp" ||
          $_GET["ruta"] == "ibc" ||

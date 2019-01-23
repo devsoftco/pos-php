@@ -312,10 +312,10 @@
             
             <li>
 
-                <a href="productos">
+                <a href="aportes-pagados">
 
                     <i class="fa fa-product-hunt"></i>
-                    <span>Productos</span>
+                    <span>Aportes Pagados</span>
 
                 </a>
 

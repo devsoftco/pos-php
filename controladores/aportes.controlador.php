@@ -125,6 +125,19 @@ class ControladorAportes{
 
     }
 
+    /*=============================================
+	MOSTRAR ESTADO PAGO APORTES PAGADOS
+	=============================================*/
+
+	static public function ctrMostrarEstadoAportesPagados($item, $valor) {
+
+		$tabla = "estado_afiliaciones";
+		$respuesta = ModeloAportes::MdlMostrarEstadoAportesPagados($tabla, $item, $valor);
+
+		return $respuesta;
+
+    }
+
     /*======================================
     CREAR PAGO APORTE
     ======================================*/
@@ -322,7 +335,7 @@ class ControladorAportes{
                                         }).then((result)=>{
 
                                                     if(result.value){
-                                                    window.location = "aportes";
+                                                    window.location = "aportes-pagados";
                                                     }
 
                                             });

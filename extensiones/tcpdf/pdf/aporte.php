@@ -3,9 +3,6 @@
 require_once "../../../controladores/aportes.controlador.php";
 require_once "../../../modelos/aportes.modelo.php";
 
-require_once "../../../controladores/afiliaciones.controlador.php";
-require_once "../../../modelos/afiliaciones.modelo.php";
-
 class imprimirAporte{
 
 public $pagoApo;
@@ -17,30 +14,21 @@ public function traerImpresionAporte(){
 $item = "id";
 $valor = $this->pagoApo;
 
-$respuestaPago= ControladorAportes::ctrMostrarEstadoAportes($item, $valor);
+$respuestaPago= ControladorAportes::ctrMostrarEstadoAportesPagados($item, $valor);
 
 $idPago = $respuestaPago["id"];
 $afiliado = $respuestaPago["afiliado"];
+$identificacion = $respuestaPago["documento"];
 $tarifa = number_format($respuestaPago["total_pagado"],2);
 $fecha_pago = substr($respuestaPago["fecha_pago"],0,-8);
-$afiliacion = $respuestaPago["afiliaciones_id"];
 $eps = $respuestaPago["eps"];
 $arl = $respuestaPago["arl"];
 $tipo_arl = $respuestaPago["tipo_arl"];
 $afp = $respuestaPago["afp"];
 $ccf = $respuestaPago["ccf"];
-$periodo = $respuestaPago["periodo"];
+$periodo = date("m/Y", strtotime($respuestaPago["periodo"]))  ;
 $metodoPago = $respuestaPago["metodo_pago"];
 $asesor = $respuestaPago["asesor"];
-
-//TRAEMOS LA INFORMACION DE LA AFILIACION
-$itemAfiliaciones = "id";
-$valorAfiliaciones = $respuestaPago["afiliaciones_id"];
-
-$respuesta= ControladorAfiliaciones::ctrMostrarAfiliaciones($itemAfiliaciones, $valorAfiliaciones);
-
-$ejecutivo = $respuesta["usuario"];
-
 
 
 require_once('tcpdf_include.php');
@@ -67,32 +55,23 @@ $bloque1 = <<<EOF
 		    <td style="width:160px;">
 	
 			    <div>
+
+				<br>
+				ASESORIAS Y TRÁMITES EN 
+				SEGURIDAD SOCIAL
 			
-				    Fecha: $fecha_pago
+				<br><br>
+				NIT: 1.094.908.658
 
-				    <br><br>
-				    INIMA  S.A.S.
+				<br>
 				
-				    <br>
-				    NIT: 900.807.128-3
+				recursosinima@outlook.com
 
-                    <br>
-                    
-                    recursosinima@outlook.com
+				<br>
+				Teléfono: 310 371 8797
 
-                    <br>
-				    Teléfono: 310 371 8797
-
-				    <br>
-				    RECIBO N.$idPago
-
-				    <br><br>					
-				    Afiliado: $afiliado
-
-				    <br>
-				    Asesor: $asesor
-
-				    <br>
+				<br>
+				RECIBO N.$idPago
 
 			    </div>
 
@@ -115,30 +94,33 @@ $bloque2 = <<<EOF
 
 <table style="font-size:9px; text-align:left">
 
-	<tr>
+<tr>
 	
-		<td style="width:80px; ">
-             Fecha Pago: 
-        </td>
-        
-        <td style="width:80px; ">
-             $fecha_pago
-        </td>
+		<td style="width:160px;">
 
-    </tr>
-    
-    <tr>
-    
-    <td style="width:80px; ">
-         Periodo Pago: 
-    </td>
-    
-    <td style="width:80px; ">
-         $periodo
-         <br><br><br>
-    </td>
+			<div>
 
-</tr>
+				<br>					
+				Afiliado: $afiliado
+
+				<br>					
+				Documento: $identificacion
+
+				<br><br>
+				Asesor: $asesor
+
+				<br><br>
+				Fecha Pago: $fecha_pago
+				<br>
+				Periodo Pagado: $periodo
+				<br><br>
+
+
+			</div>
+
+		</td>
+
+	</tr>
 
 
 </table>
@@ -224,16 +206,6 @@ $bloque3 = <<<EOF
 
 	</tr>
 
-	<tr>
-	
-		<td style="width:160px;">
-			<br>
-			<br>
-			Comprobante de pago Aporte
-		</td>
-
-	</tr>
-
 </table>
 
 
@@ -244,9 +216,45 @@ $pdf->writeHTML($bloque3, false, false, false, false, '');
 
 //--------------------------------------------------------------------------------
 
+$bloque4 = <<<EOF
+
+<table style="font-size:9px; text-align:center">
+
+	<tr>
+
+		<td style="width:160px;">
+
+			<div>
+
+				<br>					
+				==Comprobante de pago Aporte==
+
+				<br>					
+				Documento: $identificacion
+
+				<br><br>
+
+			</div>
+
+		</td>
+		
+
+	</tr>
+
+</table>
+
+
+
+EOF;
+
+$pdf->writeHTML($bloque4, false, false, false, false, '');
+
+
+//--------------------------------------------------------------------------------
+
 //SALIDA DEL ARCHIVO
 
-$pdf->Output('aporte.pdf');
+$pdf->Output('aporte.'.$identificacion.'.pdf');
 
 }
 

@@ -69,10 +69,11 @@ $bloque1 = <<<EOF
 				    Fecha: $fecha_pago
 
 				    <br><br>
-				    INIMA  S.A.S.
+					ASESORIAS Y TRÁMITES EN 
+					SEGURIDAD SOCIAL
 				
 				    <br>
-				    NIT: 900.807.128-3
+				    NIT: 1.094.908.658
 
                     <br>
                     
@@ -84,14 +85,6 @@ $bloque1 = <<<EOF
 				    <br>
 				    RECIBO N.$idPago
 
-				    <br><br>					
-				    Afiliado: $respuesta[afiliado]
-
-				    <br>
-				    Asesor: $ejecutivo
-
-				    <br>
-
 			    </div>
 
 		    </td>
@@ -99,8 +92,7 @@ $bloque1 = <<<EOF
 	    </tr>
 
 
-    </table>
-
+	</table>
 
 EOF;
 
@@ -113,15 +105,25 @@ $bloque2 = <<<EOF
 
 <table style="font-size:9px; text-align:left">
 
-	<tr>
+<tr>
 	
-		<td style="width:80px; ">
-             Fecha Afiliación: 
-        </td>
-        
-        <td style="width:80px; ">
-             $fecha_afiliacion
-             <br><br><br><br>
+		<td style="width:160px;">
+
+			<div>
+
+				<br><br>					
+				Afiliado: $respuesta[afiliado]
+
+				<br>
+				Asesor: $ejecutivo
+
+				<br><br>
+				Fecha Afiliación: $fecha_afiliacion
+				<br><br>
+
+
+			</div>
+
 		</td>
 
 	</tr>
@@ -215,7 +217,7 @@ $bloque3 = <<<EOF
 		<td style="width:160px;">
 			<br>
 			<br>
-			Comprobante de pago Afiliación
+			--Comprobante de pago Afiliación--
 		</td>
 
 	</tr>

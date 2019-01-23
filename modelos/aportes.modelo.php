@@ -78,7 +78,7 @@ ROUND(((tipo_afi.porcentaje_ccf / 100) * c.tarifa_ibc)/30)as tarifa_por_dia_ccf,
 adm_tar.tarifa as tarifa_administracion,
 imp.tarifa as tarifa_cree,
 c.tarifa_ibc, 
-CONCAT(YEAR(NOW()),MONTH(NOW())-1) as periodo, IFNULL(t3.total_pagado, 0) as total_pagado, t3.fecha as fecha_pago, t3.metodo_pago, usuario.nombre as asesor
+date_sub(NOW(), INTERVAL 1 MONTH) as periodo, IFNULL(t3.total_pagado, 0) as total_pagado, t3.fecha as fecha_pago, t3.metodo_pago, usuario.nombre as asesor
             FROM $tabla as est 
             LEFT JOIN afiliaciones as c ON c.id = est.afiliaciones_id 
             LEFT JOIN afiliados as a ON a.id = c.afiliado_id 
@@ -125,7 +125,7 @@ ROUND(((tipo_afi.porcentaje_ccf / 100) * c.tarifa_ibc)/30)as tarifa_por_dia_ccf,
 adm_tar.tarifa as tarifa_administracion,
 imp.tarifa as tarifa_cree,
 c.tarifa_ibc, 
-CONCAT(YEAR(NOW()),MONTH(NOW())-1) as periodo, IFNULL(t3.total_pagado,0) as total_pagado, t3.fecha as fecha_pago, t3.metodo_pago, usuario.nombre as asesor
+date_sub(NOW(), INTERVAL 1 MONTH) as periodo, IFNULL(t3.total_pagado,0) as total_pagado, t3.fecha as fecha_pago, t3.metodo_pago, usuario.nombre as asesor
             FROM $tabla as est 
             LEFT JOIN afiliaciones as c ON c.id = est.afiliaciones_id 
             LEFT JOIN afiliados as a ON a.id = c.afiliado_id 
@@ -179,7 +179,7 @@ CONCAT(YEAR(NOW()),MONTH(NOW())-1) as periodo, IFNULL(t3.total_pagado,0) as tota
             adm_tar.tarifa as tarifa_administracion,
             Imp.tarifa as tarifa_cree,
             c.tarifa_ibc, 
-            CONCAT(YEAR(NOW()),MONTH(NOW())-1) as periodo
+            date_sub(NOW(), INTERVAL 1 MONTH) as periodo
             FROM $tabla as est 
             LEFT JOIN afiliaciones as c ON c.id = est.afiliaciones_id 
             LEFT JOIN afiliados as a ON a.id = c.afiliado_id 
@@ -221,7 +221,7 @@ CONCAT(YEAR(NOW()),MONTH(NOW())-1) as periodo, IFNULL(t3.total_pagado,0) as tota
                     adm_tar.tarifa as tarifa_administracion,
                     Imp.tarifa as tarifa_cree,
                     c.tarifa_ibc, 
-                    CONCAT(YEAR(NOW()),MONTH(NOW())-1) as periodo
+                    date_sub(NOW(), INTERVAL 1 MONTH) as periodo
             FROM $tabla as est 
             LEFT JOIN afiliaciones as c ON c.id = est.afiliaciones_id 
             LEFT JOIN afiliados as a ON a.id = c.afiliado_id 
@@ -231,6 +231,104 @@ CONCAT(YEAR(NOW()),MONTH(NOW())-1) as periodo, IFNULL(t3.total_pagado,0) as tota
             LEFT JOIN tipo_afiliados as tipo_afi ON tipo_afi.id = c.tipo_afiliados_id
             LEFT JOIN administracion_tarifas as adm_tar ON adm_tar.id = c.administracion_tarifas_id
 	        LEFT JOIN impuestos_tarifa as imp ON imp.id = c.impuestos_tarifa_id");
+
+			$stmt -> execute();
+
+        	return $stmt -> fetchAll();
+
+		}
+
+		$stmt -> close();
+
+		$stmt = null;
+
+    }
+
+    /*=============================================
+	MOSTRAR ESTADO PAGO APORTES PAGADOS
+	=============================================*/
+
+	static public function MdlMostrarEstadoAportesPagados($tabla, $item, $valor){
+
+		if($item != null){
+
+            //$stmt = Conexion::conectar()->prepare("SELECT * FROM $tabla WHERE $item = :$item");
+            $stmt = Conexion::conectar()->prepare("SELECT est.id, CONCAT(a.nombres,' ',a.apellido_paterno,' ',a.apellido_materno) as afiliado, 
+            CONCAT(a.tipo_documento,' ',a.numero_documento) as documento, t2.estado, c.id as afiliacion_id, t2.estado_pago, DATE(t3.fecha) as mes_pago, IF(MONTH(t3.fecha) != MONTH(CURDATE()), 0, 1) as pago_aporte, IFNULL(t3.id,0) as aporte_id, DAY(est.fecha_afiliacion) as dias_afiliacion,
+tar_arl.tarifa as tarifa_arl, IFNULL(arl.nombre, 'NO TIENE') as arl, tar_arl.nombre as tipo_arl,
+
+c.eps_id, eps.nombre as eps,
+ROUND((tipo_afi.porcentaje_eps / 100) * c.tarifa_ibc) as tarifa_eps,
+ROUND(((tipo_afi.porcentaje_eps / 100) * c.tarifa_ibc)/30)as tarifa_por_dia_eps,
+c.afp_id, IFNULL(afp.nombre, 'NO TIENE') as afp,
+
+c.caja_compensaciones_id, IFNULL(ccf.nombre, 'NO TIENE') as ccf,
+
+adm_tar.tarifa as tarifa_administracion,
+imp.tarifa as tarifa_cree,
+c.tarifa_ibc, 
+t3.periodo as periodo, IFNULL(t3.total_pagado, 0) as total_pagado, t3.fecha as fecha_pago, t3.metodo_pago, usuario.nombre as asesor
+            FROM $tabla as est 
+            LEFT JOIN afiliaciones as c ON c.id = est.afiliaciones_id 
+            LEFT JOIN afiliados as a ON a.id = c.afiliado_id 
+            LEFT JOIN (SELECT * FROM estado_afiliaciones WHERE id IN (SELECT MAX(id) FROM estado_afiliaciones WHERE estado = 1 	AND estado_pago = 1  GROUP BY afiliaciones_id) ) as t2 ON t2.afiliaciones_id = c.id 
+            LEFT JOIN(SELECT * FROM aportes WHERE id IN (SELECT MAX(id) FROM aportes WHERE estado = 1  GROUP BY afiliaciones_id) ) as t3 ON t3.afiliaciones_id = c.id
+            LEFT JOIN arl as arl ON arl.id = c.arl_id
+            LEFT JOIN eps as eps ON eps.id = c.eps_id
+            LEFT JOIN afp as afp ON afp.id = c.afp_id
+            LEFT JOIN caja_compensaciones as ccf ON ccf.id = c.caja_compensaciones_id
+            LEFT JOIN arl_tarifas as tar_arl ON tar_arl.id = c.arl_tarifas_id 
+            LEFT JOIN tipo_afiliados as tipo_afi ON tipo_afi.id = c.tipo_afiliados_id
+            LEFT JOIN administracion_tarifas as adm_tar ON adm_tar.id = c.administracion_tarifas_id
+            LEFT JOIN usuarios as usuario ON usuario.id = t3.usuarios_id
+	        LEFT JOIN impuestos_tarifa as imp ON imp.id = c.impuestos_tarifa_id  
+            WHERE c.$item = :$item");
+            
+			$stmt -> bindParam(":".$item, $valor, PDO::PARAM_STR);
+
+			$stmt -> execute();
+
+        	return $stmt -> fetch();
+
+		}else{
+
+            //$stmt = Conexion::conectar()->prepare("SELECT c.id, c.nombres, c.apellido_paterno, c.apellido_materno, c.tipo_documento,
+                                                     //c.numero_documento, c.estado, c.cedula, c.celular, b.afiliado_id, a.id as afiliacion_id
+                            //FROM $tabla as c 
+            //LEFT JOIN beneficiarios as b ON c.id=b.afiliado_id 
+            //LEFT JOIN afiliaciones as a ON a.afiliado_id = c.id");
+
+            $stmt = Conexion::conectar()->prepare("SELECT est.id, CONCAT(a.nombres,' ',a.apellido_paterno,' ',a.apellido_materno) as afiliado, 
+            CONCAT(a.tipo_documento,' ',a.numero_documento) as documento, t2.estado, c.id as afiliacion_id, t2.estado_pago, DATE(t3.fecha) as mes_pago, IF(MONTH(t3.fecha) != MONTH(CURDATE()), 0, 1) as pago_aporte, IFNULL(t3.id,0) as aporte_id, DAY(est.fecha_afiliacion) as dias_afiliacion,
+tar_arl.tarifa as tarifa_arl, IFNULL(arl.nombre, 'NO TIENE') as arl, tar_arl.nombre as tipo_arl,
+ROUND(tar_arl.tarifa/30) as tarifa_por_dia_arl, c.arl_id, c.arl_tarifas_id,
+c.eps_id, eps.nombre as eps,
+ROUND((tipo_afi.porcentaje_eps / 100) * c.tarifa_ibc) as tarifa_eps,
+ROUND(((tipo_afi.porcentaje_eps / 100) * c.tarifa_ibc)/30)as tarifa_por_dia_eps,
+c.afp_id, IFNULL(afp.nombre, 'NO TIENE') as afp,
+ROUND ((tipo_afi.porcentaje_afp/100)*c.tarifa_ibc) as tarifa_afp,
+ROUND(((tipo_afi.porcentaje_afp / 100) * c.tarifa_ibc)/30)as tarifa_por_dia_afp,
+c.caja_compensaciones_id, IFNULL(ccf.nombre, 'NO TIENE') as ccf,
+ROUND ((tipo_afi.porcentaje_ccf/100)*c.tarifa_ibc) as tarifa_ccf,
+ROUND(((tipo_afi.porcentaje_ccf / 100) * c.tarifa_ibc)/30)as tarifa_por_dia_ccf,
+adm_tar.tarifa as tarifa_administracion,
+imp.tarifa as tarifa_cree,
+c.tarifa_ibc, 
+CONCAT(YEAR(NOW()),MONTH(NOW())-1) as periodo, IFNULL(t3.total_pagado,0) as total_pagado, t3.fecha as fecha_pago, t3.metodo_pago, usuario.nombre as asesor
+            FROM $tabla as est 
+            LEFT JOIN afiliaciones as c ON c.id = est.afiliaciones_id 
+            LEFT JOIN afiliados as a ON a.id = c.afiliado_id 
+            LEFT JOIN (SELECT * FROM estado_afiliaciones WHERE id IN (SELECT MAX(id) FROM estado_afiliaciones WHERE estado = 1 	AND estado_pago = 1  GROUP BY afiliaciones_id) ) as t2 ON t2.afiliaciones_id = c.id 
+            LEFT JOIN(SELECT * FROM aportes WHERE id IN (SELECT MAX(id) FROM aportes WHERE estado = 1  GROUP BY afiliaciones_id) ) as t3 ON t3.afiliaciones_id = c.id
+            LEFT JOIN arl as arl ON arl.id = c.arl_id
+            LEFT JOIN eps as eps ON eps.id = c.eps_id
+            LEFT JOIN afp as afp ON afp.id = c.afp_id
+            LEFT JOIN caja_compensaciones as ccf ON ccf.id = c.caja_compensaciones_id
+            LEFT JOIN arl_tarifas as tar_arl ON tar_arl.id = c.arl_tarifas_id 
+            LEFT JOIN tipo_afiliados as tipo_afi ON tipo_afi.id = c.tipo_afiliados_id
+            LEFT JOIN administracion_tarifas as adm_tar ON adm_tar.id = c.administracion_tarifas_id
+            LEFT JOIN usuarios as usuario ON usuario.id = t3.usuarios_id
+	        LEFT JOIN impuestos_tarifa as imp ON imp.id = c.impuestos_tarifa_id ORDER BY t3.id DESC");
 
 			$stmt -> execute();
 
